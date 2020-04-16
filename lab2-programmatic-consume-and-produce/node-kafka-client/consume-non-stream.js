@@ -1,17 +1,18 @@
 const Kafka = require("node-rdkafka"); // see: https://github.com/blizzard/node-rdkafka
-const externalConfig = require('./config').config;
-
+const externalConfig = require('./config');
 
 const CONSUMER_GROUP_ID = "node-consumer-one"
-
-const kafkaConf = {
+// construct a Kafka Configuration object understood by the node-rdkafka library
+// merge the configuration as defined in config.js with additional properties defined here
+const kafkaConf = {...externalConfig.kafkaConfig
+    , ...{
     "group.id": CONSUMER_GROUP_ID,
-    "metadata.broker.list": externalConfig.KAFKA_BROKERS,
     "socket.keepalive.enable": true,
-    "debug": "generic,broker,security"
+    "debug": "generic,broker,security"}
 };
 
-const topics = [externalConfig.KAFKA_TOPIC];
+const topics = [externalConfig.topic]
+
 const consumer = new Kafka.KafkaConsumer(kafkaConf, {
     "auto.offset.reset": "earliest"  // [smallest, earliest, beginning] or [largest, latest, end] , error ; see: https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
 });
