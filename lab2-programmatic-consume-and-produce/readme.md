@@ -106,14 +106,23 @@ It will take some time to complete this command. About 45MB worth of npm modules
 
 This is as good a time as any to open file *produce.js* again and interpret what it does.
 
-* compose configuration (primarily Kafka Broker endpoints)
+* compose configuration (primarily a decision between a local Kafka cluster or a CloudKarafka cluster and the definition of the Kafka Broker endpoints )
 * create a Producer (based on the configuration)
 * prepare the Producer (with event handlers to respond)
 * connect the Producer
 * generate and produce events (Feel free to change the contents of the generated messages)
 * disconnect the producer
 
-Before you can run the producer application, make sure that the KAFKA_BROKERS configuration in *configure.js* is correct for your environment - and that the KAFKA_TOPIC refers to a topic that already exists on your Kafka Cluster.
+Before you can run the producer application, make sure that the configuration in file *configure.js* is correct for your environment.
+
+Open the file *config.js*. If you are running with a local Kafka Cluster, then focus on *localConfig*. Ensure that the value of property *metadata.broker.list* corresponds with your local Kafka environment. If instead you work against a CloudKarafka environment, there is a little bit more to do:
+* set I_AM_USING_CLOUD_KARAFKA to true
+* set property *metadata.broker.list* to the Servers for your CloudKarafka instance; these are found under Connection Details on the Instance Details Page in the CloudKarafka website
+* set properties *sasl.username* and *sasl.password* to the correct values - that you can find in the same location as the Server endpoints
+
+In both cases - local Kafka platform or CloudKarafka environment - make sure that the constant *topic* has the right value. For local environments you probably do not have to change the value -but for CloudKarafka you just as probably have to modify to align with the name of the topic on your CloudKarafka instance. 
+
+Note: the remainder of this instructions will use the name *test-topic* for the Kafka Topic. If you work on CloudKarafka or have used a different name for a local topic, please substitute the name that applies to your environment whenever *test-topic* is mentioned.
 
 When these conditions ar met - and `npm install` is done installing the required node modules, it is time to produce some messages to the topic.  
 
@@ -135,7 +144,7 @@ Check the contents of the file *consume.js*. It has the same dependencies as *pr
 
 What goes on in the *consume.js* application?
 
-* compose configuration (consists primarily of the Kafka Broker endpoints as well as the Configuration Group Id)
+* compose configuration (consists primarily of the Kafka Broker endpoints as well as the Consumer Group Id)
 * create a StreamReader (based on the configuration, with the offset to the earliest message available on the topic and with subscription(s) on the topic(s) defined in config.js )
 * prepare the StreamReader (with event handlers to respond to data events on the Stream that are emitted when a message is read from the Kafka Topic)
 * define event handler for the disconnected event
@@ -150,6 +159,8 @@ This should print all messages on the *test-topic* to the console.
 If you run the consumer application a second time, you will probably not see any messages - or only new ones. This is the effect of using a Consumer Group Id. The Kafka Cluster retains the Consumer Group Id and its corresponding offset. In the second run, the consuming applications joins the same Consumer Group as before. This group has already consumed all messages. If you now change the Consumer Group Id and run the Node application again, you will see all messages on the topic once more. This is because for this new Consumer Group, no messages at all have been read from the topic, and Kafka will offer up all messages from the beginning of time.
 
 ### Check in Apache Kafka HQ
+Note: AKHQ can not be used for CloudKarafka environments.
+
 Open AKHQ in a browser. It has been started as part of the **Kafka platform ** and can be reached on <http://kafka:28042/> (provided you added the IP address to the *hosts* file associated with the host name *kafka*).
 
 Go to the Topics page and focus on *test-topic*. Verify that the messages published from the Node application show up. Take note of the consumer group registered for this topic: you should see the same label(s) as defined in the Node application.
@@ -167,7 +178,7 @@ The next section does something similar on the consuming end: publish a web appl
 ### Node Web Application for Producing Messages
 Earlier in this lab we looked at a very simple Node web application: *hello-world-web*. Now we combine that web application with the Kafka Producer we worked on just before. Look in directory  lab2-programmatic-consume-and-produce\node-kafka-web-client and open file *web-producer.js*.
 
-This Node application starts an HTTP Server to handle GET requests. It uses a query parameter called *message* for the content of the message to publish to the Kafka Topic. A module referenced as *./produce* is *required* into the *web-producer.js*. This is interpreted by the Node runtime as: find a local file *produce.js*, load it and make available as public objects anything in *module.exports*. The file *produce.js* is largely the same as before, only this time it does not automatically start generating and publishing messages and it has a function called *produceMessage* that produces one message to the KAFKA_TOPIC. This function is exported in *module.exports* and as such available in *web-producer.js*. Note: *producer.js* imports *config.js* - the file with the KAFKA Broker endpoints.  
+This Node application starts an HTTP Server to handle GET requests. It uses a query parameter called *message* for the content of the message to publish to the Kafka Topic. A module referenced as *./produce* is *required* into the *web-producer.js*. This is interpreted by the Node runtime as: find a local file *produce.js*, load it and make available as public objects anything in *module.exports*. The file *produce.js* is largely the same as before, only this time it does not automatically start generating and publishing messages and it has a function called *produceMessage* that produces one message to the KAFKA_TOPIC. This function is exported in *module.exports* and as such available in *web-producer.js*. Note: *producer.js* imports *config.js* - the file with the KAFKA Broker endpoints. Make sure that *config.js* has the correct settings for your environment, just as you defined them in the previous lab.
 
 Before you can run the application, you need to bring in the dependencies. From the command line in the directory that contains file *package.json* run:
 ```
