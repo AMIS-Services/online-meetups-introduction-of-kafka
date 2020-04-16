@@ -11,7 +11,7 @@ const kafkaConf = {...externalConfig.kafkaConfig
 };
 const messageBatchSize = 10; // number of messages to publish in one burst
 const topic = externalConfig.topic;
-console.log("topic "+topic)
+
 // create a Kafka Producer - connected to the KAFKA_BROKERS defined in config.js
 const producer = new Kafka.Producer(kafkaConf);
 prepareProducer(producer)
