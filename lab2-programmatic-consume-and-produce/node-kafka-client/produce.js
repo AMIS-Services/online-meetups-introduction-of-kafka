@@ -1,15 +1,17 @@
 const Kafka = require("node-rdkafka");
 // read the KAFKA Brokers and KAFKA_TOPIC values from the local file config.js
-const externalConfig = require('./config').config;
+const externalConfig = require('./config');
 
 // construct a Kafka Configuration object understood by the node-rdkafka library
-const kafkaConf = {
-    "metadata.broker.list": externalConfig.KAFKA_BROKERS,
+// merge the configuration as defined in config.js with additional properties defined here
+const kafkaConf = {...externalConfig.kafkaConfig
+    , ...{
     "socket.keepalive.enable": true,
-    "debug": "generic,broker,security"
+    "debug": "generic,broker,security"}
 };
 const messageBatchSize = 10; // number of messages to publish in one burst
-const topic = externalConfig.KAFKA_TOPIC;
+const topic = externalConfig.topic;
+console.log("topic "+topic)
 // create a Kafka Producer - connected to the KAFKA_BROKERS defined in config.js
 const producer = new Kafka.Producer(kafkaConf);
 prepareProducer(producer)
@@ -41,7 +43,7 @@ function prepareProducer(producer) {
 }
 
 // function to generate a message
-const generateMessage = i => new Buffer.from(`Generated message - number ${i}`);
+const generateMessage = i => new Buffer.from(`Generated a happy message - number ${i}`);
 
 function generateAndProduceMessages(arg) {
     for (var i = 0; i < messageBatchSize; i++) {
