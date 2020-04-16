@@ -19,6 +19,14 @@ Note the numbers shown on each of the containers: these are the ports on which t
 
 * [Node and NPM Runtime](#Node-Runtime)
 
+## Light Weight Alternative Environment
+If you do not have the time or opportunity or resources or permissions to install Docker Compose or a Virtual Machine on your laptop, then you can make use of a simple alternative in the form of a Cloud Based Kafka Environment. Note: you will still need to install the Node runtime to go through most labs.
+
+*CloudKarafka* offers managed Kafka Clusters on the cloud and as part of their offering, they make a free plan available - the *Developer Duck* plan. 
+![](resources/cloud-karafka1.png)
+
+Check out this section [Gettin started with Cloud Karafka Developer Duck](#Getting-Started-with-Cloud-Karafka )
+
 ## Preparing Docker Compose 
 Docker Compose is a tool for defining and running multi-container Docker applications such as the Apache Kafka Platform we use in this workshop. With Compose, you use a YAML file to configure your application's services - the *docker-compose.yml* file in this directory. Then, with a single command, you create and start all the services from your configuration. Docker Compose relies on Docker Engine for any meaningful work, so make sure you have Docker Engine installed either locally or remote, depending on your setup.
 
@@ -126,3 +134,65 @@ Obviously you will inspect scripts and source code in this workshop. Any text ed
 
 ## Browser
 The Apache Kafka HQ GUI tool runs in a browser (that must be able to access the Kafka Cluster at the PUBLIC_IP). Any modern browser should do.
+
+
+## Getting Started with Cloud Karafka
+
+Go to the [CloudKarafka website](https://www.cloudkarafka.com/plans.html) and scroll down to the *Developer Duck* plan. Click on *Try a Developer Duck*. 
+
+![](resources/cloud-karafka1.png)
+
+You will be asked to login, either with your GitHub account, a Google account or a new account that you create via *Sign Up*.
+![](resources/cloud-karafka-login.png)
+
+Specify a name for the instance - for example *Online Meetup Apache Kafka* (however, *Butterfly* will also do nicely).
+
+![](resources/cloud-karafka-new-instance-name-tags.png)
+The Developer Duck plan (FREE!) should already be selected.
+
+Click on *Select Region*.
+
+The default region - and the one that seems most stable - is US-East-1 on AWS. You might as well stick to that option.  
+
+![](resources/cloud-karafka-region.png)
+
+Press *Review*.
+
+You will get an overview of the choices you have made. You can review and decide to go back to revise. But why would you? Go ahead, and press *Create Instance*.
+
+![](resources/cloud-karafka-review.png)
+
+After a little while, you will be notificed that your new instance has been provided for you.
+![](resources/cloud-karafka-new-instance-ready.png)
+
+Click on name of the instance. It is a hyperlink, and it will take you to a page with details regarding your new instance.
+
+![](resources/cloud-karafka-new-instance-details.png)
+
+You will need various details on this page later on when start to programmatically access Kafka Topics.
+* username
+* password
+* Topic Prefix
+* Servers (endpoints of the Kafka brokers in your new cluster instance) 
+
+You can always return to this page to look up these details.
+
+### Try out the new Cloud Karafka Ducky Plan Instance
+
+Go to the Topic tab. You will see one topic listed: a *default* topic that was created along with your Kafka instance. Note that under the Ducky Plan you can create up to 5 topics. And you can also delete them.
+![](resources/cloud-karafka-topics.png)
+
+Select and copy the name of the default topic to the clipboard. Then open the *Browser* tab.
+
+On this page, you can publish messages to your topic or consumer messages from your topic. Paste the name of the topic into both Topic fields:
+![](resources/cloud-karafka-browser.png)
+Then click on *Consume*. A consumer is created and the messages consumed are pushed to the browser.
+
+Enter a message in the Producer area and click on *Produce*. The message is published to the topic. Next, it is consumed from the topic, pushed to the browser and displayed in the page. An indication of the partition from which the message is consumed is also provided. 
+
+![](resources/cloud-karafka-consuming.png)
+
+Feel free to play around with different types of messages. 
+![](resources/cloud-karafka-consuming-2.png)
+
+Note: most advanced tools available from CloudKarafka are unfortunately though not unexpectedly *not* part of the free plan.
