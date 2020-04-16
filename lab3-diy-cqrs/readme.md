@@ -95,6 +95,13 @@ Note: you can also create a new topic on the *Topics* page in AKHQ
 
 ![](images/create-topic-in-akhf.png)
 
+### Running on CloudKarafka
+In case you are not using a locally running Kafka Cluster - the creation of a topic is a little different. If you are using CloudKarafka, you can create a new topic in the *Topics* tab of the CloudKarafka console. The name does not really matter much - although a nice descriptive name is best.
+
+Make sure to set the proper values in *config.js* for the topic name and the broker endpoints - as well as the switch variable *I_AM_USING_CLOUD_KARAFKA*.
+
+The remainder of the lab will refer to the name of the topic as *connection-mandates-topic*. On CloudKarafka, your topic name will have the prefix of your specific cluster instance. Please substitute the correct topic name whenever you read *connection-mandates-topic*.
+
 ## Extend CRM Microservice with event publication to connection-mandates-topic
 
 Add this next line at the top of *app.js*; this imports module producer, defined in file *produce.js*. This module provides the bridge to the Kafka Topic.
@@ -152,7 +159,7 @@ And now on to more serious business: consuming Connection Mandate messages into 
 
 ## Extend IoT Platform Microservice with consumption of Connection Mandate messages
 
-When the IoT Platform microservice is started, we want it to register as a consumer on the Kafka topic *connection-mandates-topic*. We will use the familiar modules *consume.js* and *config.js*. The latter one contains the KAFKA_BROKERS endpoints and the KAFKA_TOPIC name. Please make sure that these are correct for your environment.
+When the IoT Platform microservice is started, we want it to register as a consumer on the Kafka topic *connection-mandates-topic*. We will use the familiar modules *consume.js* and *config.js*. The latter one contains the *metadata.broker.list* with broker endpoints and the *topic* name. Please make sure that these are correct for your environment.
 
 In order to get access to the module exported by *consume.js*, please add this line at the top of *app.js*:
 
