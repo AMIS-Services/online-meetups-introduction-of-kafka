@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Conclusion OnLine Meetups - Kafka Topic Watcher</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function toggle(elementId) {
+          config(); 
+        }
+    </script>
+<style >
+td {  padding: 10px; }
+
+.floatRight {     float: right; }
+</style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <img src="images/events-done-differently.png" />        
+        <h1>Conclusion OnLine Meetup - Kafka Topic Watcher</h1>
+        Simple utility to watch messages on all topics in a Kafka Cluster.
+        <h3>Topics Watched</h3>
+        <div id="topics">
+        </div>
+        <a href="#" onclick="toggle('recentTweetLikes')">Reread all Topic(s) from Beginning</a>
+        <button onclick="clearMessageTable()">Clear Messages</button>
+        <br/>
+          <h2>Live Kafka Topic Stream</h2>
+        <table id="topicMessagesTable">
+            <tr>
+                <th>Key&nbsp;</th>
+                <th>Topic&nbsp;</th>
+                <th>Content&nbsp;</th>
+                <th>Partition</th>
+                <th>Offset within Partition</th>
+                <th>Timestamp of Production</th>
+            </tr>
+        </table>
+        <br/>
+    </div>
+    <script src="js/sse-handler.js"></script>
+    <script src="js/topics-management.js"></script>
+
+</body>
+
+</html>
