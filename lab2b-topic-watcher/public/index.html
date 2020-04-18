@@ -12,11 +12,6 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        function toggle(elementId) {
-          config(); 
-        }
-    </script>
 <style >
 td {  padding: 10px; }
 
@@ -33,8 +28,9 @@ td {  padding: 10px; }
         <h3>Topics Watched</h3>
         <div id="topics">
         </div>
-        <a href="#" onclick="toggle('recentTweetLikes')">Reread all Topic(s) from Beginning</a>
-        <button onclick="clearMessageTable()">Clear Messages</button>
+        <a href="#" onclick="config()">Reread all Topic(s) from Beginning</a>
+        <button onclick="clearMessages()">Clear Messages</button> 
+        <button onclick="rewriteTable()">Repaint Table</button>
         <br/>
           <h2>Live Kafka Topic Stream</h2>
         <table id="topicMessagesTable">
@@ -49,7 +45,7 @@ td {  padding: 10px; }
         </table>
         <br/>
     </div>
-    <script src="js/sse-handler.js"></script>
+    <script src="js/message-handler.js"></script>
     <script src="js/topics-management.js"></script>
 
 </body>

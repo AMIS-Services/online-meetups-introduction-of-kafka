@@ -5,37 +5,36 @@ const bodyParser = require('body-parser')
 const sseMW = require('./sse');
 const PORT = 3010
 
-
 const app = express()
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json()) // to parse body of content type application/json
   //configure sseMW.sseMiddleware as function to get a stab at incoming requests, in this case by adding a Connection property to the request
   .use(sseMW.sseMiddleware)
+  // to serve static files from the *public* folder under the current directory  
   .use(express.static(__dirname + '/public'))
+  // /updates is the SSE endpoint; any client that sends a GET request to this endpoint is 'connected', becomes a client and is informed with SSE events
   .get('/updates', function (req, res) {
-    console.log("res (should have sseConnection)= " + res.sseConnection);
     var sseConnection = res.sseConnection;
-    console.log("sseConnection= ");
     sseConnection.setup();
     sseClients.add(sseConnection);
   })
+  // retrieve a list of topics on the target Kafka Cluster
   .get('/topics', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify(topics))
   })
+  // refresh the message consumer (from earliest messages)
   .post('/config', function (req, res) {
-
-    console.log(` CONFIG is ${JSON.stringify(req.body)}`)
     res.setHeader('Content-Type', 'application/json');
+    // reinitialize the Kafka Topic Consumer from the earliest messages available on the topic
     consumer.initializeConsumer(topics,true)
     res.end(JSON.stringify(req.body ))
   });
 
 const server = http.createServer(app);
 server.listen(PORT, function listening() {
-  console.log('Listening on %d', server.address().port);
+  console.log(`HTTP Server is listening at port ${PORT} for HTTP requests`)
 });
-console.log(`HTTP Server is listening at port ${PORT} for HTTP GET requests`)
 
 // Realtime updates
 var sseClients = new sseMW.Topic();
@@ -62,7 +61,6 @@ setInterval(() => {
 const handleMessage = function (message) {
   const messageContent = message.value.toString()
   const messageKey = message.key ? message.key.toString() : ""
-
   let msg = message
   msg.value = null
   msg.key = null
@@ -71,7 +69,6 @@ const handleMessage = function (message) {
   updateSseClients(
     message
   )
-
 }
 
 let topics

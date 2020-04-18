@@ -15,6 +15,7 @@ function config() {
     postData('../config', { "refreshFromBeginning": "Y" })
         .then((data) => {
             console.log(data); // JSON data parsed by `response.json()` call
+            clearMessages()
         });
 }//config
 
@@ -51,11 +52,3 @@ getData('../topics')
         topicsDIV.appendChild(makeUL(data))
     });
 
-function clearMessageTable() {
-    var table = document.getElementById("topicMessagesTable");
-    // delete all rows after header
-    const totalRowCount = table.rows.length; // 5
-    // remove all but the first (header) row 
-    for (let i = totalRowCount; i > 1; i--)
-        table.deleteRow(1)
-}//clearMessageTable

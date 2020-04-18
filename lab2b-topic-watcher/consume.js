@@ -1,4 +1,3 @@
-
 const Kafka = require("node-rdkafka"); // see: https://github.com/blizzard/node-rdkafka
 const externalConfig = require('./config');
 
@@ -11,7 +10,6 @@ const kafkaConf = {
         "debug": "generic,broker,security"
     }
 };
-
 
 let messageHandlers = {} // an key-value map with Kafka Topic Names as key and a reference to a function to handle message consumed from that Topic
 const setMessageHandler = function (topic, messageHandlingFunction) {
@@ -62,6 +60,10 @@ function initializeConsumer(topicsToListenTo, readFromBeginning=false) {
         else console.log("No message handler is registered for handling mssages on topic ${message.topic}")
     });
 
+    stream.on('error', function (err) {
+        console.log(`Error event on Stream ${err} `);
+
+    });
     console.log(`Stream consumer created to consume (from the beginning) from topic ${topicsToListenTo}`);
 
     stream.consumer.on("disconnected", function (arg) {
