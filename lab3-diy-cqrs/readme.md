@@ -116,7 +116,7 @@ The function that process both new and changed customers is function *processCus
 ```
 { "connectionId":"4617", "connectionMandate" : "1" }
 ```
-Add the following lines near the end of the function, just before the return statement:
+Add the following lines near the end of the function *processCustomer*, just before the return statement:
 ```
     // check if the either the customer is new or the mandate settings has changed; in both cases: an event needs to be produced
     if (!oldCustomer || (oldCustomer.connectionId != customerObject.connectionId) || (oldCustomer.connectionMandate != customerObject.connectionMandate)) {
@@ -222,7 +222,7 @@ curl  http://localhost:3006?connectionId=7733 -v
 ```
 What you see here is quite important: the Kafka Topic has now become the single source of truth for the IoT Platform service. The data on the topic persists and provides the state for the microservice. The microservice can be stopped and started again and multiple instances of the microservice can run side by side (scale out or scale horizontally) and they will all have access to the same data.
 
-Stop the IoT Platform service once more. Let's now update the mandate level for a different connection identifier - 4512 - from 0 to 2
+Stop the IoT Platform service once more. Let's now update the mandate level for a different connection identifier - 4512 - from 0 to 2 by making this call to the CRM Service
 
 ```
 curl POST http://localhost:3005/customers/5 -H "Content-Type: application/json" -d '{    "firstName": "Markus",    "lastName": "Berg",    "city": "Maassluis",    "connectionId": "4512",   "connectionMandate": "2"}' -v
@@ -235,7 +235,7 @@ Verify the successful processing of this command, by inspecting the actual state
 ``` 
 curl  http://localhost:3005?customerId=5 -v
 ```
-Now start the IoT Platform service again. It was not up and running while we made the update to the the Markus Berg record. When we now ask the IoT Platform Service for the mandate level for Markus Berg, do we get the level specified in the customer-database.csv file (0) or the level it was set to through the CRM service when the IoT Platform service was not running?
+Now start the IoT Platform service again. It was not up and running while we made the update to the the Markus Berg record. When we now ask the IoT Platform Service for the mandate level for Markus Berg, do we get the level specified in the customer-database.csv file (0) or the level it was set to (2) through the CRM service in the call we just made when the IoT Platform service was not running?
 
 ``` 
 curl  http://localhost:3006?connectionId=4512 -v
