@@ -19,7 +19,7 @@ The heart of the Kafka Topic Watcher is the Node application - of which app.js i
 * pushes SSE (Server Sent Events) to the web application (using the SSE support in *sse.js*)
 * imports and initializes the *consume* module that connects to the target Kafka Cluster (as specified in *config.js*)
 * set a message handler with the *consume* module for  handling the messages from all topics in the Kafka Cluster: function *handleMessage*. This function prepares the event to push to the browser and uses function *updateSseClients* and the *sse.js* module for sending a SSE event to all connected Kafka Topic Watcher clients.
-
+![](images/kafka-topic-watcher-app-design.png)
 The web application consists of file *index.html* and two supporting (client side) JavaScript files: *message-handler.js* and *topics-management.js*. The former subscribes to the SSE endpoint and handles the SSE Events that are pushed from the Node application for each message consumed from one of the Kafka Topics. The messages are collected in a *messages* array as well as written to the top of the *topicMessagesTable* HTML Table element.
 
 The current list of Topics on the Kafka Cluster are requested from the Node application in an XHR (aka AJAX request), from *topic-management.js*. A list of topics is written to the HTML page based on the response content for this request. 
