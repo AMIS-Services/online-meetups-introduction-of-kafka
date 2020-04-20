@@ -1,12 +1,17 @@
 const http = require('http')
 const url = require('url')
 // ... insert line to require module consume
+const consumer = require('./consume')
 
 const PORT = 3006
 
 const connectionMandates = {}
 // ... insert function handleConnectionMandateMessage
-
+const handleConnectionMandateMessage = function(message) {
+    console.log(`Handling ConnectionMandate Message ${message.value.toString()} ` )
+    connectionMandate = JSON.parse(message.value.toString())
+    connectionMandates[connectionMandate.connectionId]=connectionMandate
+}
 
 // create an HTTP server that handles HTTP requests; it is handed two parameters: the request and response objects
 const server = http.createServer((req, res) => {
@@ -38,3 +43,5 @@ server.listen(PORT);
 //... insert lines to set the message handler and initialize the consumer
 console.log(`HTTP Server is listening at port ${PORT} for HTTP GET requests`)
 
+consumer.setMessageHandler(handleConnectionMandateMessage)
+consumer.initializeConsumer();

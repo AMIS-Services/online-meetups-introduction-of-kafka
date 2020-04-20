@@ -7,18 +7,23 @@ const localConfig = {
 
 };
 
-const topic = "connection-mandates-topic" // set the correct topic name, especially when you are using CloudKarafka
+const topic = "kjynvuby-connection-mandates-topic" // set the correct topic name, especially when you are using CloudKarafka
 
-const I_AM_USING_CLOUD_KARAFKA = false
+const I_AM_USING_CLOUD_KARAFKA = true
 
 const cloudkarafka_config = {
     // Specify the endpoints of the CloudKarafka Servers for your instance found under Connection Details on the Instance Details Page
     // this looks like this: moped-01.srvs.cloudkafka.com:9094,moped-02.srvs.cloudkafka.com:9094,moped-03.srvs.cloudkafka.com:9094"
-    "metadata.broker.list": "YOUR BROKER ENDPOINTS"
+    "metadata.broker.list": "moped-01.srvs.cloudkafka.com:9094,moped-02.srvs.cloudkafka.com:9094,moped-03.srvs.cloudkafka.com:9094"
     , "security.protocol": "SASL_SSL",
     "sasl.mechanisms": "SCRAM-SHA-256",
-    "sasl.username": "YOUR_USERNAME",
-    "sasl.password": "YOUR_PASSWORD"
+    "sasl.username": "kjynvuby",
+    "sasl.password": "D0_sMX2ICVfuOfYjpZE8VdAnMlrknXSd" 
+    // "metadata.broker.list": "YOUR BROKER ENDPOINTS"
+    // , "security.protocol": "SASL_SSL",
+    // "sasl.mechanisms": "SCRAM-SHA-256",
+    // "sasl.username": "YOUR_USERNAME",
+    // "sasl.password": "YOUR_PASSWORD"
 };
 
 // merge the cloudkarafka_config property with config properties; cloudkarafka_config will override properties with the same name
