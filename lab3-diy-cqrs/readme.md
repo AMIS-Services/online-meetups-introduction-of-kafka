@@ -272,3 +272,15 @@ curl  http://localhost:3006?connectionId=7733 -v
 What happened when you restarted the CRM service is that it reloaded the *customer-database.csv* file and produced messages for each of the records. In this file, the mandate level for the connection identifier is 1. The readjustment to 2 was published to the Kafka Topic but not written to the CSV file. It did not become a persistent part of the state of the CRM service. The message on the Kafka Topic stating the mandate level at 1 - produced as the CRM service was restarting - has overridden the earlier message on the topic that declared the mandate level for 7733 to be 2. 
 
 
+## Bonus: Distributed CQRS
+To take the simple CQRS case of the CRM and IoT Platform services to the next level, you can implement a fully distributed setup. This consists of:
+* CRM Service runs on one laptop
+* IoT Platform Service runs on another laptop
+* Kafka Cluster runs in "the cloud"
+
+Changes in customer data on one laptop result in messages published to the Kafka Topic and in turn are consumed on the other laptop, leading to changes in he Connection Mandates data.
+
+![](images/bonus-lab-distributed-cqrs.png)
+
+In order to pull this off, you will need to find a colleague to collaborate with. And you need your Kafka Topic to run somewhere in the cloud; CloudKarafka is  a good option for this (see [environment instructions](../environment/readme.md) for instructions on how to get going with CloudKarafka).
+
