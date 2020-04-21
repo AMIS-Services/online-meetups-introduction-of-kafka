@@ -1,6 +1,6 @@
 const Kafka = require("node-rdkafka");
 // read the KAFKA Brokers and KAFKA_PRODUCE_TOPIC values from the local file config.js
-const externalConfig = require('./config').config;
+const externalConfig = require('./config');
 
 
 
@@ -11,20 +11,18 @@ const produceMessage = function (message) {
 }
 
 // construct a Kafka Configuration object understood by the node-rdkafka library
-const kafkaConf = {
-    "metadata.broker.list": externalConfig.KAFKA_BROKERS,
+// merge the configuration as defined in config.js with additional properties defined here
+const kafkaConf = {...externalConfig.kafkaConfig
+    , ...{
     "socket.keepalive.enable": true,
-    "debug": "generic,broker,security"
+    "debug": "generic,broker,security"}
 };
-
 const topic = externalConfig.KAFKA_PRODUCE_TOPIC;
 // create a Kafka Producer - connected to the KAFKA_BROKERS defined in config.js
 const producer = new Kafka.Producer(kafkaConf);
 prepareProducer(producer)
 // initialize the connection of the Producer to the Kafka Cluster
 producer.connect();
-
-
 
 function prepareProducer(producer) {
     // event handler attached to the Kafka Producer to handle the ready event that is emitted when the Producer has connected sucessfully to the Kafka Cluster

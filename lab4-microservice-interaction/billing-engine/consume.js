@@ -1,19 +1,24 @@
 const Kafka = require("node-rdkafka"); // see: https://github.com/blizzard/node-rdkafka
-const externalConfig = require('./config').config;
+const externalConfig = require('./config');
 
 const CONSUMER_GROUP_ID = "billing-engine" //uncomment to always read all messages from the beginning +new Date().getTime()
 
-const kafkaConf = {
+// construct a Kafka Configuration object understood by the node-rdkafka library
+// merge the configuration as defined in config.js with additional properties defined here
+const kafkaConf = {...externalConfig.kafkaConfig
+    , ...{
     "group.id": CONSUMER_GROUP_ID,
-    "metadata.broker.list": externalConfig.KAFKA_BROKERS,
     "socket.keepalive.enable": true,
-    "debug": "generic,broker,security"
+    "debug": "generic,broker,security"}
 };
 
 const topics = externalConfig.KAFKA_CONSUME_TOPICS;
+const ANSWERS_TOPIC = externalConfig.KAFKA_ANSWERS_TOPIC
+const WORKFLOW_TOPIC = externalConfig.KAFKA_WORKFLOW_TOPIC
 
 let messageHandlers = {} // an key-value map with Kafka Topic Names as key and a reference to a function to handle message consumed from that Topic
 const setMessageHandler = function (topic, messageHandlingFunction) {
+    console.log(`Define message handler for Topic ${topic}`)
     messageHandlers[topic] = messageHandlingFunction
 }
 
@@ -24,7 +29,7 @@ function initializeConsumer() {
     stream.on('data', function (message) {
         console.log(`Consumed message on Stream from Topic ${message.topic}: ${message.value.toString()} `);
         if (messageHandlers[message.topic]) messageHandlers[message.topic](message)
-        else console.log("No message handler is registered for handling mssages on topic ${message.topic}")
+        else console.log(`No message handler is registered for handling mssages on topic ${message.topic}`)
         // the structure of the messages is as follows:
         //   {
         //     value: Buffer.from('hi'), // message contents as a Buffer
@@ -44,4 +49,4 @@ function initializeConsumer() {
         process.exit();
     });
 }
-module.exports = { setMessageHandler, initializeConsumer };
+module.exports = { setMessageHandler, initializeConsumer, ANSWERS_TOPIC, WORKFLOW_TOPIC };

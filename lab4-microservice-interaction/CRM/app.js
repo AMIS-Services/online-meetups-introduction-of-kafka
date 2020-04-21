@@ -122,7 +122,7 @@ const handleQuestion = async function  (questionMessage) {
         console.log(`Ignore question in category ${questionCategory}; the CRM microservice does not answer that type of question.`)
     }
 }
-consumer.setMessageHandler("questions-topic", handleQuestion)
+consumer.setMessageHandler(consumer.QUESTIONS_TOPIC, handleQuestion)
 consumer.initializeConsumer()
 
 const answerQuestion = async function( customerIdentifier, qaIdentifier ) {

@@ -15,7 +15,7 @@ The steps for implementing this scenario:
 Create three Kafka Topics: workflow-queue, questions-topic and answers-topic
 ![](images/kafka-topics.png)
 
-Like you did in Labs 1 and 3, open a terminal window on the Docker Host and run a `docker exec` command to start a shell in the `kafka-1` docker container (or use Apache Kafka HQ to create the topics from the GUI)
+Like you did in Labs 1 and 3, open a terminal window on the Docker Host and run a `docker exec` command to start a shell in the `kafka-1` docker container (or use Apache Kafka HQ to create the topics from the GUI). Note: if you are using CloudKarafka as your Kafka Cluster, then you should create the topics via de CloudKarafka browser console.
 
 ```
 docker exec -ti kafka-1 bash

@@ -1,16 +1,19 @@
 const Kafka = require("node-rdkafka"); // see: https://github.com/blizzard/node-rdkafka
-const externalConfig = require('./config').config;
+const externalConfig = require('./config');
 
 const CONSUMER_GROUP_ID = "customer-service" // uncomment to always read all messages from the top +new Date().getTime()
 
-const kafkaConf = {
+// construct a Kafka Configuration object understood by the node-rdkafka library
+// merge the configuration as defined in config.js with additional properties defined here
+const kafkaConf = {...externalConfig.kafkaConfig
+    , ...{
     "group.id": CONSUMER_GROUP_ID,
-    "metadata.broker.list": externalConfig.KAFKA_BROKERS,
     "socket.keepalive.enable": true,
-    "debug": "generic,broker,security"
+    "debug": "generic,broker,security"}
 };
 
 const topics = externalConfig.KAFKA_CONSUME_TOPICS;
+const QUESTIONS_TOPIC = externalConfig.KAFKA_CONSUME_TOPICS[0]
 
 let messageHandlers = {} // an key-value map with Kafka Topic Names as key and a reference to a function to handle message consumed from that Topic
 const setMessageHandler = function (topic, messageHandlingFunction) {
@@ -44,4 +47,4 @@ function initializeConsumer() {
         process.exit();
     });
 }
-module.exports = { setMessageHandler, initializeConsumer };
+module.exports = { setMessageHandler, initializeConsumer , QUESTIONS_TOPIC};

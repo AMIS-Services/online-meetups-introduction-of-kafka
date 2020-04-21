@@ -39,8 +39,8 @@ const handleAnswer = function (answerMessage) {
 }
 
 
-consumer.setMessageHandler("workflow-queue", handleWorkflowAssignment)
-consumer.setMessageHandler("answers-topic", handleAnswer)
+consumer.setMessageHandler(consumer.WORKFLOW_TOPIC, handleWorkflowAssignment)
+consumer.setMessageHandler(consumer.ANSWERS_TOPIC, handleAnswer)
 
 consumer.initializeConsumer()
 
