@@ -142,6 +142,17 @@ Some questions were produced by the Billing Engine to the *questions-topic*. The
 
 This in turn will bring the *Billing Engine* back to life: it consumes the answers, correlates these with the pending jobs and completes those jobs. Files with the bills for three customers should now be generated into directory *lab4-microservice-interaction\billing-engine*.
 
+To "spice things up a little", you can create a new customer through the CRM service - and later on request a bill for this fresh new customer.
+
+To create a new customer, use this call with cURL:
+```
+curl POST http://localhost:3008/customers -H "Content-Type: application/json" -d '{    "firstName": "Jessica",    "lastName": "Johnson",    "city": "Groningen",    "connectionId": "4928",   "connectionMandate": "1"}' -v
+```
+On Windows, use the next call (Windows deals differently with ' and ""):
+```
+curl POST http://localhost:3008/customers -H "Content-Type: application/json" -d "{    \"firstName\": \"Jessica\",    \"lastName\": \"Johnson\",    \"city\": \"Groningen\",    \"connectionId\": \"4928\",   \"connectionMandate\": \"1\"}" -v
+```
+
 
 ## Trigger the Billing Run Workflow
 With all services up and running, let's put all pieces together in one smooth end to end flow. 
