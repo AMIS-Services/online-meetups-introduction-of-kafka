@@ -32,12 +32,17 @@ function handlePostedCustomerIdentifiers(req, res) {
     });
 } //handlePostedCustomerIdentifiers
 
-function orderBillForCustomer(customerIdentifier) {
+async function orderBillForCustomer(customerIdentifier) {
     const workflowOrder = {
         "workflow-type": "bill-generation"
         , "workflow-id": new Date().getTime()
         , "create-time": new Date().toISOString()
         , "payload": { "customerIdentifier": customerIdentifier }
     }
+    sleep(378)
     producer.produceMessage(JSON.stringify(workflowOrder))
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
