@@ -55,7 +55,7 @@ setInterval(() => {
     , "partition": "N/A", "key": "HB", "timestamp": new Date(), "offset": heartbeatCount++
   })
 }
-  , 25000
+  , 120000
 )
 
 const handleMessage = function (message) {
@@ -76,7 +76,6 @@ async function getStarted() {
   topics = await consumer.getTopics()
   console.log(`Topics have returned: ${topics}`)
   topics.forEach((topic) => { consumer.setMessageHandler(topic, handleMessage) })
-  consumer.setMessageHandler(topics, handleMessage)
   consumer.initializeConsumer(topics)
 }
 
